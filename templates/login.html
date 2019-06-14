@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Accedi a Ludus Parthenope</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/mystyle.css">
+</head>
+<body id="bodyhome">
+<div class="container" id="fill"></div>
+<div class="jumbotron" id="jumbohome">
+    <div class="container">
+        <h1 id="titlename">Ludus Parthenope</h1>
+        <form method="POST" action="{{url_for('login')}}">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" name="username" id="Username" placeholder="Inserire username" maxlength="20">
+            </div>
+            <div class="form-group">
+                <label for="Password">Password</label>
+                <input type="password" class="form-control" name="pw" id="Password" placeholder="Password" maxlength="20">
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        <br>
+        <p>Non sei ancora registrato? Clicca <a href="{{ url_for('register') }}">qui</a> per creare un account</p>
+    </div>
+</div>
+</body>
+</html>

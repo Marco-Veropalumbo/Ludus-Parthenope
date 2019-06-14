@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ludus Parthenope</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/mystyle.css">
+</head>
+<body id="bodysite">
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="{{ url_for('home') }}">Ludus Parthenope</a>
+    <a class="nav-item nav-link active" href="{{ url_for('library')}}">Libreria</a>
+    <span class="navbar-text">Accesso effettuato come {{session['username']}}</span>
+    <a class="nav-item nav-link active" href="{{ url_for('logout')}}">Logout</a>
+</nav>
+<div class="jumbotron" id="jumbomain">
+    <h1>Lista tornei a cui &egrave; possibile partecipare:</h1>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 offset-md-4">
+                <table class="table table-bordered table-dark">
+                    <thead>
+                    <tr>
+                        <th scope="col">Gioco</th>
+                        <th scope="col">Data</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% set utente = session.database.users.find_one({'name':session['username']}) %}
+                    {% set tornei = session.database.tournaments.find({}) %}
+                    {% for torneo in tornei %}
+                        {% if torneo.title in utente.games %}
+                            <tr>
+                                <td>{{ torneo.title }}</td>
+                                <td>{{ torneo.date }}</td>
+                                {% if utente.name in torneo.competitors %}
+                                    <td>Inscritto</td>
+                                {% else %}
+                                    <td><a href="{{ url_for('join',torneo=torneo.name)}}">inscriviti</a></td>
+                                {% endif %}
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+</body>
+</html>

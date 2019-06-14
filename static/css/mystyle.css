@@ -1,0 +1,36 @@
+#bodyhome {
+    background-image: url("../images/pexels-photo-777001.jpeg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#jumbohome {
+    background: rgba(0,0,0,0.5);
+    margin: auto;
+    margin-top: 14%;
+    margin-bottom: 14%;
+    max-width: 20%;
+    min-width: 300px;
+    text-align: center;
+    color: white;
+}
+
+#titlename {
+    color: blue;
+}
+
+#bodysite {
+    background-image: url("../images/technology-game-guitar-green-red-gadget-1197879-pxhere.com.jpg");
+    background-size: cover;
+}
+
+#jumbomain {
+    background: rgba(0,0,0,0.5);
+    text-align: center;
+    color: white;
+}
+
+#ControlSelect {
+    margin: auto;
+    max-width: 20%;
+}
