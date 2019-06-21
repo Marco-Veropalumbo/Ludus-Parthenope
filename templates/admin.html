@@ -22,61 +22,65 @@
         </form>
         <ul class="navbar-nav">
             <a class="nav-item nav-link active" href="{{ url_for('home')}}">Home</a>
+            <a class="nav-item nav-link active" href="{{ url_for('library')}}">Libreria</a>
             <a class="nav-item nav-link active" href="{{ url_for('team') }}">Team</a>
-            {% if session['username'] == "admin" %}
-                <a class="nav-item nav-link active" href="{{ url_for('admin')}}">Pannello Amministrazione</a>
-            {% endif %}
             <a class="nav-item nav-link active" href="{{ url_for('logout')}}">Logout</a>
-        </ul>>
+        </ul>
     </div>
     <span class="navbar-text">Accesso effettuato come {{session['username']}}</span>
 </nav>
 <div class="jumbotron" id="jumbomain">
-    <h1>Libreria</h1>
+    <h1>Pannello Amministrazione</h1>
     <br>
-    {% with errori = get_flashed_messages() %}
-        {% if errori %}
-            {% for errore in errori %}
-                <div class="alert alert-warning" role="alert">{{ errore }}</div>
+    {% with messaggi = get_flashed_messages() %}
+        {% if messaggi %}
+            {% for messaggio in messaggi %}
+                <div class="alert alert-warning" role="alert">{{ messaggio }}</div>
             {% endfor %}
         {% endif %}
     {% endwith %}
     <div class="container">
         <div class="row">
             <div class="col-md-4 mx-md-auto">
-                <table class="table table-bordered table-dark">
-                    <thead>
-                    <tr>
-                        <th scope="col">Giochi in possesso</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% set utente = session.database.users.find_one({'name':session['username']}) %}
-                    {% for gioco in utente.games %}
-                        <tr>
-                            <td>{{ gioco }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                <h3>Aggiungi un gioco</h3>
+                <br>
+                <form method="POST" action="{{url_for('addgame')}}">
+                    <div class="form-group">
+                        <label for="Newgame">Nome gioco</label>
+                        <input type="text" class="form-control" name="newgame" id="Newgame" placeholder="Titolo Gioco" maxlength="50" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Aggiungi</button>
+                </form>
+                <br>
             </div>
         </div>
-        <br>
         <div class="row">
-            <div class="col-md mx-md-auto">
-                <h2>Inserisci gioco</h2>
-                <form method="POST" action="{{ url_for('aggiungi') }}">
+            <div class="col-md-4 mx-md-auto">
+                <h3>Aggiungi un torneo</h3>
+                <br>
+                <form method="POST" action="{{url_for('addtournament')}}">
                     <div class="form-group">
-                        <label for="ControlSelect">Seleziona gioco da aggiungere</label>
-                        <select class="form-control" name="add" id="ControlSelect" required>
+                        <label for="Newtournament">Codice torneo</label>
+                        <input type="text" class="form-control" name="newtournamentid" id="Newtournament" placeholder="Codice torneo" maxlength="10" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="Newtournamentgame">Seleziona gioco</label>
+                        <select class="form-control" name="newtournamentgame" id="Newtournamentgame" required>
                             {% set ngiochi = session.database.games.find({}) %}
                             {% for opzione in ngiochi %}
                                 <option>{{ opzione.title }}</option>
                             {% endfor %}
                         </select>
-                        <br>
-                        <button class="btn btn-primary" name="add" type="submit">Aggiungi</button>
                     </div>
+                    <div class="form-group">
+                        <label for="datatorneo">Data torneo</label>
+                        <input type="date" class="form-control" id=datatorneo" name="newtournamentdate" required>
+                    </div>
+                <div class="form-group">
+                    <label for="oratorneo">Orario</label>
+                    <input type="time" class="form-control" id="oratorneo" name="newtournamenthour" required>
+                </div>
+                    <button type="submit" class="btn btn-primary">Aggiungi</button>
                 </form>
             </div>
         </div>

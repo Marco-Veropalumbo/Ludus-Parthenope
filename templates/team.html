@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Ludus Parthenope</title>
+    <link rel="shortcut icon" href="/static/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/mystyle.css">
+</head>
+<body id="bodysite">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{{ url_for('home') }}">Ludus Parthenope</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <form class="form-inline my-2 my-lg-0" method="POST" action="{{url_for('search')}}">
+            <div class="form-group">
+                <input class="form-control mr-sm-2" name="codice" type="search" placeholder="Codice torneo" aria-label="Codice torneo">
+                <button class="btn btn-primary my-2 my-sm-0" type="submit">Cerca</button>
+            </div>
+        </form>
+        <ul class="navbar-nav">
+            <a class="nav-item nav-link active" href="{{ url_for('home')}}">Home</a>
+            <a class="nav-item nav-link active" href="{{ url_for('library')}}">Libreria</a>
+            {% if session['username'] == "admin" %}
+                <a class="nav-item nav-link active" href="{{ url_for('admin')}}">Pannello Amministrazione</a>
+            {% endif %}
+            <a class="nav-item nav-link active" href="{{ url_for('logout')}}">Logout</a>
+        </ul>
+    </div>
+    <span class="navbar-text">Accesso effettuato come {{session['username']}}</span>
+</nav>
+<div class="jumbotron" id="jumbomain">
+    <h1>Team</h1>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mx-md-auto">
+                {% if session.team %}
+                    <h2>{{ session['team'] }}</h2>
+                    {% set membri_team = session.database.teams.find_one({'name': session['team']}) %}
+                        <table class="table table-bordered table-dark">
+                        <thead>
+                        <tr>
+                            <th scope="col">Lista membri</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for membro in membri_team.users %}
+                        <tr>
+                            <td>{{ membro }}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                        </table>
+                    <br>
+                    <form action="{{ url_for('leaveteam') }}">
+                    <button type="submit" class="btn btn-primary">Lascia team</button>
+                    </form>
+                {% else %}
+                    <h2>Non fai parte di nessun team</h2>
+                    <br>
+                    {% with errori = get_flashed_messages() %}
+                        {% if errori %}
+                            {% for errore in errori %}
+                                <div class="alert alert-danger" id="wrong" role="alert">{{ errore }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    <h3>Crea team</h3>
+                    <form method="POST" action="{{ url_for('createteam') }}">
+                        <div class="form-group">
+                            <label for="createam">Nome team</label>
+                            <input type="text" class="form-control" name="teamname" id="createam" placeholder="Nome team" maxlength="20" required>
+                        </div>
+                    <button type="submit" class="btn btn-primary">Crea team</button>
+                    </form>
+                    <br>
+                    <h3>Entra in un team</h3>
+                    <form method="POST" action="{{ url_for('searchteam') }}">
+                        <div class="form-group">
+                            <label for="searchteam">Nome team</label>
+                            <input type="text" class="form-control" name="teamname" id="searchteam" placeholder="Nome team" maxlength="20" required>
+                        </div>
+                    <button type="submit" class="btn btn-primary">Entra nel team</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

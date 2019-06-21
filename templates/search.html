@@ -21,63 +21,46 @@
             </div>
         </form>
         <ul class="navbar-nav">
-            <a class="nav-item nav-link active" href="{{ url_for('home')}}">Home</a>
+            <a class="nav-item nav-link active" href="{{ url_for('library')}}">Libreria</a>
             <a class="nav-item nav-link active" href="{{ url_for('team') }}">Team</a>
             {% if session['username'] == "admin" %}
                 <a class="nav-item nav-link active" href="{{ url_for('admin')}}">Pannello Amministrazione</a>
             {% endif %}
             <a class="nav-item nav-link active" href="{{ url_for('logout')}}">Logout</a>
-        </ul>>
+        </ul>
     </div>
     <span class="navbar-text">Accesso effettuato come {{session['username']}}</span>
 </nav>
 <div class="jumbotron" id="jumbomain">
-    <h1>Libreria</h1>
-    <br>
-    {% with errori = get_flashed_messages() %}
-        {% if errori %}
-            {% for errore in errori %}
-                <div class="alert alert-warning" role="alert">{{ errore }}</div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
     <div class="container">
         <div class="row">
-            <div class="col-md-4 mx-md-auto">
+            <div class="col-md-6 mx-md-auto">
                 <table class="table table-bordered table-dark">
                     <thead>
                     <tr>
-                        <th scope="col">Giochi in possesso</th>
+                        <th scope="col">Gioco</th>
+                        <th scope="col">Data</th>
+                        <th scope="col">Iscritti</th>
+                        {% if session['username'] == "admin" %}
+                            <th scopr="col">Membri</th>
+                        {% endif %}
                     </tr>
                     </thead>
                     <tbody>
-                    {% set utente = session.database.users.find_one({'name':session['username']}) %}
-                    {% for gioco in utente.games %}
-                        <tr>
-                            <td>{{ gioco }}</td>
-                        </tr>
-                    {% endfor %}
+                    <tr>
+                        <td>{{ session.ricerca.title }}</td>
+                        <td>{{ session.ricerca.date }}</td>
+                        <td>{{ session.ricerca.competitors | length }}</td>
+                        {% if session['username'] == "admin" %}
+                            <td>
+                                {% for iscritto in session.ricerca.competitors %}
+                                    {{ iscritto }};
+                                {% endfor %}
+                            </td>
+                        {% endif %}
+                    </tr>
                     </tbody>
                 </table>
-            </div>
-        </div>
-        <br>
-        <div class="row">
-            <div class="col-md mx-md-auto">
-                <h2>Inserisci gioco</h2>
-                <form method="POST" action="{{ url_for('aggiungi') }}">
-                    <div class="form-group">
-                        <label for="ControlSelect">Seleziona gioco da aggiungere</label>
-                        <select class="form-control" name="add" id="ControlSelect" required>
-                            {% set ngiochi = session.database.games.find({}) %}
-                            {% for opzione in ngiochi %}
-                                <option>{{ opzione.title }}</option>
-                            {% endfor %}
-                        </select>
-                        <br>
-                        <button class="btn btn-primary" name="add" type="submit">Aggiungi</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
